@@ -65,17 +65,71 @@
   gap: 8px;
 }
 
-.user-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
+.user-nickname {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
 }
 
-.user-name {
+/* ===== Login Modal ===== */
+.login-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.2s ease;
+}
+
+.login-modal {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: var(--card-shadow-hover);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.login-modal h2 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.login-modal p {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: var(--transition);
+  margin-bottom: 12px;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 4px var(--accent-blue-light);
+}
+
+.login-error {
+  color: var(--accent-red);
   font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  margin-bottom: 8px;
 }
 
 .login-btn {

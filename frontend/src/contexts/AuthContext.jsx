@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import api, { API_BASE } from '../api';
+import api from '../api';
 
 const AuthContext = createContext(null);
 
@@ -8,26 +8,23 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      api.get('/auth/me')
-        .then(res => setUser(res.data))
-        .catch(() => {
-          localStorage.removeItem('token');
-          setUser(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+    const saved = localStorage.getItem('cs_user');
+    if (saved) {
+      setUser(JSON.parse(saved));
     }
+    setLoading(false);
   }, []);
 
-  const login = () => {
-    window.location.href = `${API_BASE}/oauth2/authorization/google`;
+  const login = async (nickname) => {
+    const res = await api.post('/auth/login', { nickname });
+    const userData = res.data;
+    setUser(userData);
+    localStorage.setItem('cs_user', JSON.stringify(userData));
+    return userData;
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('cs_user');
     setUser(null);
   };
 

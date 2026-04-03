@@ -19,19 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
-
-    private String name;
-
-    private String profileImageUrl;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider;
-
     @Column(nullable = false, unique = true)
-    private String providerId;
+    private String nickname;
 
     @CreationTimestamp
     @Column(updatable = false)

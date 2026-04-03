@@ -1,6 +1,7 @@
 # CS Study Platform
 
-CS 면접 준비를 위한 웹 플랫폼입니다. 카테고리별 학습, AI 채점, Slack 리마인드 봇을 제공합니다.
+CS 공부를 웹 사이트, 카테고리별 학습, AI 채점, Slack 리마인드 봇을 제공합니다.
+<img width="500" height="400" alt="image" src="https://github.com/user-attachments/assets/bde6a38e-df84-4148-8c40-be3f9eb216f1" />
 
 ## 주요 기능
 
@@ -60,11 +61,6 @@ cs-study-platform/
 ├── review/            # 복습용 개념 정리 노트
 └── render.yaml        # Render 배포 설정
 ```
-
-## 배포 URL
-
-- **Frontend**: https://cs-study-platform.vercel.app
-- **Backend API**: https://cs-study-backend.onrender.com/api/v1
 
 ## 로컬 실행
 

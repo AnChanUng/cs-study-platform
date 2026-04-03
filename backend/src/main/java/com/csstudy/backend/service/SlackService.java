@@ -119,7 +119,7 @@ public class SlackService {
 
             String questionUrl = baseUrl + "/questions/" + q.getId();
 
-            String text = String.format(
+            String questionText = String.format(
                     "*%d. %s*\n" +
                     "📂 카테고리: `%s`  |  📊 난이도: `%s`  |  📖 학습횟수: `%d회`\n\n" +
                     ">%s\n\n" +
@@ -134,9 +134,23 @@ public class SlackService {
                     "type", "section",
                     "text", Map.of(
                             "type", "mrkdwn",
-                            "text", text
+                            "text", questionText
                     )
             ));
+
+            // 정답
+            if (q.getAnswer() != null && !q.getAnswer().isBlank()) {
+                String answerPreview = q.getAnswer().length() > 300
+                        ? q.getAnswer().substring(0, 300) + "..."
+                        : q.getAnswer();
+                blocks.add(Map.of(
+                        "type", "context",
+                        "elements", List.of(
+                                Map.of("type", "mrkdwn",
+                                        "text", "💡 *정답*\n" + answerPreview)
+                        )
+                ));
+            }
 
             if (i < questions.size() - 1) {
                 blocks.add(Map.of("type", "divider"));

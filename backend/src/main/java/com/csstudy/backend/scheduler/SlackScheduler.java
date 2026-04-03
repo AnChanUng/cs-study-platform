@@ -17,12 +17,21 @@ public class SlackScheduler {
     @Value("${slack.enabled}")
     private boolean enabled;
 
-    @Scheduled(cron = "${slack.daily-cron}", zone = "Asia/Seoul")
-    public void dailyReminder() {
+    @Scheduled(cron = "${slack.morning-cron}", zone = "Asia/Seoul")
+    public void morningReminder() {
         if (!enabled) {
             return;
         }
-        log.info("일일 CS 면접 질문 알림 스케줄러 실행");
+        log.info("오전 CS 면접 질문 알림 스케줄러 실행");
+        slackService.sendDailyReminder();
+    }
+
+    @Scheduled(cron = "${slack.evening-cron}", zone = "Asia/Seoul")
+    public void eveningReminder() {
+        if (!enabled) {
+            return;
+        }
+        log.info("오후 CS 면접 질문 알림 스케줄러 실행");
         slackService.sendDailyReminder();
     }
 

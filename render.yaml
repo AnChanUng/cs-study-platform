@@ -9,3 +9,7 @@ services:
         value: "false"
       - key: APP_BASE_URL
         value: https://cs-study-backend.onrender.com
+      - key: SPRING_DATASOURCE_URL
+        value: "jdbc:h2:mem:cs_study"
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: "create"

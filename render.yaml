@@ -2,8 +2,7 @@ services:
   - type: web
     name: cs-study-backend
     runtime: docker
-    dockerfilePath: backend/Dockerfile
-    dockerContext: .
+    rootDir: backend
     plan: free
     envVars:
       - key: SLACK_ENABLED

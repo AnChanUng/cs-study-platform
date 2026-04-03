@@ -22,11 +22,11 @@ public class AuthController {
         if (nickname == null || nickname.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "닉네임을 입력해주세요."));
         }
-        nickname = nickname.trim();
+        final String trimmed = nickname.trim();
 
-        User user = userRepository.findByNickname(nickname)
+        User user = userRepository.findByNickname(trimmed)
                 .orElseGet(() -> userRepository.save(
-                        User.builder().nickname(nickname).build()
+                        User.builder().nickname(trimmed).build()
                 ));
 
         return ResponseEntity.ok(UserResponse.from(user));

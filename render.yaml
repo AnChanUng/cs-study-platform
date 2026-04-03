@@ -1,3 +1,9 @@
+databases:
+  - name: cs-study-db
+    plan: free
+    databaseName: cs_study
+    user: cs_study_user
+
 services:
   - type: web
     name: cs-study-backend
@@ -9,10 +15,10 @@ services:
         value: "false"
       - key: APP_BASE_URL
         value: https://cs-study-frontend.onrender.com
-      - key: SPRING_DATASOURCE_URL
-        value: "jdbc:h2:mem:cs_study"
-      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
-        value: "create"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cs-study-db
+          property: connectionURI
 
   - type: web
     name: cs-study-frontend

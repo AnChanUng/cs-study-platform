@@ -17,4 +17,6 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 COPY src/main/resources/content content
 EXPOSE 8080
-ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "app.jar"]
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]

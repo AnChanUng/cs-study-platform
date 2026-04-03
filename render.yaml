@@ -1,9 +1,3 @@
-databases:
-  - name: cs-study-db
-    plan: free
-    databaseName: cs_study
-    user: cs_study_user
-
 services:
   - type: web
     name: cs-study-backend

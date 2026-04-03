@@ -132,6 +132,27 @@
   margin-bottom: 8px;
 }
 
+.login-switch {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+}
+
+.switch-btn {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.switch-btn:hover {
+  text-decoration: underline;
+}
+
 .login-btn {
   background: var(--gradient-primary);
   color: white;

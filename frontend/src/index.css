@@ -1,1 +1,86 @@
-/* Reset - handled by App.css */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F4F5F7;
+  --bg-tertiary: #EAEBEE;
+  --text-primary: #191F28;
+  --text-secondary: #4E5968;
+  --text-tertiary: #8B95A1;
+  --text-quaternary: #B0B8C1;
+  --border-color: #E5E8EB;
+  --accent-blue: #3182F6;
+  --accent-blue-light: #EBF2FF;
+  --accent-green: #00C471;
+  --accent-green-light: #E8FAF0;
+  --accent-orange: #F59E0B;
+  --accent-orange-light: #FFF8E6;
+  --accent-red: #F04452;
+  --accent-red-light: #FFF0F1;
+  --accent-purple: #8B5CF6;
+  --accent-purple-light: #F3EFFE;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  letter-spacing: -0.02em;
+}
+
+input, textarea {
+  font-family: inherit;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--accent-blue);
+  color: white;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-quaternary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}

@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
 
+const difficultyLabel = {
+  BASIC: '기초',
+  INTERMEDIATE: '중급',
+  ADVANCED: '심화',
+};
+
 export default function QuestionPage() {
   const { id } = useParams();
   const [question, setQuestion] = useState(null);
@@ -12,6 +18,10 @@ export default function QuestionPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
+    setShowAnswer(false);
+    setUserAnswer('');
+    setGradeResult(null);
     api.get(`/questions/${id}`)
       .then(res => setQuestion(res.data))
       .catch(console.error)
@@ -41,21 +51,38 @@ export default function QuestionPage() {
     }
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
-  if (!question) return <div className="empty">Question not found</div>;
+  if (loading) {
+    return (
+      <div className="loading">
+        <div className="loading-spinner" />
+        불러오는 중...
+      </div>
+    );
+  }
+
+  if (!question) {
+    return (
+      <div className="empty">
+        <div className="empty-icon">❓</div>
+        질문을 찾을 수 없습니다
+      </div>
+    );
+  }
 
   return (
-    <div className="question-detail">
+    <div className="question-detail fade-in">
       <div className="page-header">
         <Link to={`/category/${question.categorySlug}`} className="back-link">
           ← {question.categoryName}
         </Link>
         <h1>{question.title}</h1>
-        <div className="question-meta">
+        <div className="question-meta" style={{ marginTop: 4 }}>
           <span className={`badge badge-${question.difficulty.toLowerCase()}`}>
-            {question.difficulty}
+            {difficultyLabel[question.difficulty] || question.difficulty}
           </span>
-          <span className="badge badge-study">Studied {question.studyCount}x</span>
+          {question.studyCount > 0 && (
+            <span className="badge badge-study">학습 {question.studyCount}회</span>
+          )}
         </div>
       </div>
 
@@ -64,7 +91,7 @@ export default function QuestionPage() {
           className={`action-btn ${question.bookmarked ? 'active' : ''}`}
           onClick={handleBookmark}
         >
-          {question.bookmarked ? '★ Bookmarked' : '☆ Bookmark'}
+          {question.bookmarked ? '★ 북마크됨' : '☆ 북마크'}
         </button>
       </div>
 
@@ -72,11 +99,12 @@ export default function QuestionPage() {
         <div className="question-content">{question.content}</div>
       )}
 
+      {/* Grading Section */}
       <div className="grading-section">
-        <h2>Write your answer</h2>
+        <h2>✏️ 답변 작성</h2>
         <textarea
           className="answer-input"
-          placeholder="Write your answer here..."
+          placeholder="여기에 답변을 작성하세요..."
           value={userAnswer}
           onChange={e => setUserAnswer(e.target.value)}
         />
@@ -85,18 +113,22 @@ export default function QuestionPage() {
           onClick={handleGrade}
           disabled={grading || !userAnswer.trim()}
         >
-          {grading ? 'Grading...' : 'Submit Answer'}
+          {grading ? '채점 중...' : '채점하기'}
         </button>
 
         {gradeResult && (
-          <div className="grade-result">
-            <div className={`grade-score grade-${gradeResult.grade}`}>
-              {gradeResult.grade} ({gradeResult.score}pts)
+          <div className={`grade-result grade-${gradeResult.grade}`}>
+            <div className="grade-score-wrapper">
+              <div className="grade-score-circle">
+                {gradeResult.grade}
+              </div>
+              <div className="grade-points">{gradeResult.score}점</div>
             </div>
             <div className="grade-feedback">{gradeResult.feedback}</div>
+
             {gradeResult.matchedKeywords?.length > 0 && (
-              <div>
-                <strong>Matched keywords:</strong>
+              <div className="keywords-section">
+                <div className="keywords-label">✅ 포함된 키워드</div>
                 <div className="keywords">
                   {gradeResult.matchedKeywords.map((k, i) => (
                     <span key={i} className="keyword-matched">{k}</span>
@@ -105,8 +137,8 @@ export default function QuestionPage() {
               </div>
             )}
             {gradeResult.missedKeywords?.length > 0 && (
-              <div style={{ marginTop: 12 }}>
-                <strong>Missed keywords:</strong>
+              <div className="keywords-section" style={{ marginTop: 14 }}>
+                <div className="keywords-label">❌ 누락된 키워드</div>
                 <div className="keywords">
                   {gradeResult.missedKeywords.map((k, i) => (
                     <span key={i} className="keyword-missed">{k}</span>
@@ -118,13 +150,14 @@ export default function QuestionPage() {
         )}
       </div>
 
+      {/* Model Answer Section */}
       <div className="answer-section">
-        <h2>Model Answer</h2>
+        <h2>📖 모범답안</h2>
         <button className="toggle-btn" onClick={() => setShowAnswer(!showAnswer)}>
-          {showAnswer ? 'Hide Answer' : 'Show Answer'}
+          {showAnswer ? '모범답안 숨기기' : '모범답안 보기'}
         </button>
         {showAnswer && question.answer && (
-          <div className="answer-box" style={{ marginTop: 12 }}>
+          <div className="answer-box">
             {question.answer}
           </div>
         )}

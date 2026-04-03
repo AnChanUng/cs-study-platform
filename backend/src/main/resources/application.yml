@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/cs_study;AUTO_SERVER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  cache:
+    type: simple
+
+server:
+  port: 8080
+
+slack:
+  webhook-url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/YOUR/WEBHOOK/URL}
+  enabled: ${SLACK_ENABLED:false}
+  daily-cron: "0 0 9 * * *"
+  weekly-cron: "0 0 9 * * MON"
+
+app:
+  base-url: ${APP_BASE_URL:http://localhost:3000}

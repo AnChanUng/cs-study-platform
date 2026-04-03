@@ -1,0 +1,18 @@
+# Docker is no longer required.
+# H2 (embedded DB) + Spring Cache are used instead.
+# This file is kept for future reference if you want to switch to PostgreSQL + Redis.
+#
+# version: '3.8'
+# services:
+#   postgres:
+#     image: postgres:16-alpine
+#     environment:
+#       POSTGRES_DB: cs_study
+#       POSTGRES_USER: csuser
+#       POSTGRES_PASSWORD: cspass1234
+#     ports:
+#       - "5432:5432"
+#   redis:
+#     image: redis:7-alpine
+#     ports:
+#       - "6379:6379"

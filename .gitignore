@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.next/
+.gradle/
+build/
+
+# Environment
+.env
+.env.local
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Database
+backend/data/
+*.mv.db
+*.lock.db
+*.trace.db
+
+# OS
+.DS_Store
+Thumbs.db

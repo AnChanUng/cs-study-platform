@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: cs-study-backend
+    runtime: docker
+    rootDir: backend
+    plan: free
+    envVars:
+      - key: SLACK_ENABLED
+        value: "false"
+      - key: APP_BASE_URL
+        value: https://cs-study-backend.onrender.com

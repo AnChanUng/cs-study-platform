@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -34,6 +36,16 @@ public class SlackService {
     @Value("${app.base-url}")
     private String baseUrl;
 
+    private static final Map<DayOfWeek, String> DAY_CATEGORY = Map.of(
+            DayOfWeek.MONDAY, "operating-system",
+            DayOfWeek.TUESDAY, "network",
+            DayOfWeek.WEDNESDAY, "software-engineering",
+            DayOfWeek.THURSDAY, "database",
+            DayOfWeek.FRIDAY, "database",
+            DayOfWeek.SATURDAY, "java",
+            DayOfWeek.SUNDAY, "java"
+    );
+
     public void sendDailyReminder() {
         if (!enabled) {
             log.info("Slack 알림이 비활성화 상태입니다.");
@@ -41,8 +53,14 @@ public class SlackService {
         }
 
         try {
-            // Pick more candidates, then shuffle to get 3 random ones from the least-studied pool
-            List<Question> candidates = questionRepository.findLeastStudied(PageRequest.of(0, 20));
+            DayOfWeek today = LocalDate.now(java.time.ZoneId.of("Asia/Seoul")).getDayOfWeek();
+            String categorySlug = DAY_CATEGORY.getOrDefault(today, "database");
+
+            List<Question> candidates = questionRepository.findLeastStudiedByCategory(categorySlug, PageRequest.of(0, 20));
+            if (candidates.isEmpty()) {
+                log.warn("카테고리 {}에 질문이 없습니다. 전체에서 선택합니다.", categorySlug);
+                candidates = questionRepository.findLeastStudied(PageRequest.of(0, 20));
+            }
             if (candidates.isEmpty()) {
                 log.warn("데이터베이스에 질문이 없습니다. 일일 알림을 건너뜁니다.");
                 return;
@@ -53,7 +71,7 @@ public class SlackService {
 
             Map<String, Object> payload = buildDailyPayload(selected);
             sendMessage(webhookUrl, payload);
-            log.info("Slack 일일 알림을 성공적으로 전송했습니다.");
+            log.info("Slack 일일 알림 전송 완료 (카테고리: {})", categorySlug);
         } catch (Exception e) {
             log.warn("Slack 일일 알림 전송 실패: {}", e.getMessage(), e);
         }

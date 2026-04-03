@@ -31,6 +31,9 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query("SELECT q FROM Question q ORDER BY q.studyCount ASC, q.lastStudiedAt ASC NULLS FIRST")
     List<Question> findLeastStudied(Pageable pageable);
 
+    @Query("SELECT q FROM Question q WHERE q.category.slug = :slug ORDER BY q.studyCount ASC, q.lastStudiedAt ASC NULLS FIRST")
+    List<Question> findLeastStudiedByCategory(@Param("slug") String slug, Pageable pageable);
+
     @Query("SELECT COUNT(q) FROM Question q WHERE q.lastStudiedAt >= :since")
     long countStudiedSince(@Param("since") LocalDateTime since);
 

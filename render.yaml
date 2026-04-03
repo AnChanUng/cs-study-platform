@@ -8,8 +8,23 @@ services:
       - key: SLACK_ENABLED
         value: "false"
       - key: APP_BASE_URL
-        value: https://cs-study-backend.onrender.com
+        value: https://cs-study-frontend.onrender.com
       - key: SPRING_DATASOURCE_URL
         value: "jdbc:h2:mem:cs_study"
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: "create"
+
+  - type: web
+    name: cs-study-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://cs-study-backend.onrender.com/api/v1

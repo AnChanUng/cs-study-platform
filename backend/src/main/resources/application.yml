@@ -23,7 +23,7 @@ server:
 slack:
   webhook-url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/YOUR/WEBHOOK/URL}
   enabled: ${SLACK_ENABLED:false}
-  daily-cron: "0 0 9 * * *"
+  daily-cron: "0 20 8 * * *"
   weekly-cron: "0 0 9 * * MON"
 
 app:

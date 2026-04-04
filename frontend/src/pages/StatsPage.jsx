@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import { hardcodedCategories, hardcodedQuestions } from '../hardcodedData';
 
 const difficultyLabel = {
   BASIC: '기초',
@@ -14,15 +15,29 @@ export default function StatsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fallbackStats = () => {
+      const byCategory = {};
+      const byDifficulty = {};
+      hardcodedQuestions.forEach(q => {
+        const catName = hardcodedCategories.find(c => c.slug === q.categorySlug)?.name || q.categorySlug;
+        byCategory[catName] = (byCategory[catName] || 0) + 1;
+        byDifficulty[q.difficulty] = (byDifficulty[q.difficulty] || 0) + 1;
+      });
+      return { totalQuestions: hardcodedQuestions.length, studiedQuestions: 0, byCategory, byDifficulty };
+    };
+
     Promise.all([
       api.get('/stats'),
       api.get('/grading/stats'),
     ])
       .then(([sRes, gRes]) => {
-        setStats(sRes.data);
+        setStats(sRes.data?.totalQuestions ? sRes.data : fallbackStats());
         setGradingStats(gRes.data);
       })
-      .catch(console.error)
+      .catch(() => {
+        setStats(fallbackStats());
+        setGradingStats(null);
+      })
       .finally(() => setLoading(false));
   }, []);
 

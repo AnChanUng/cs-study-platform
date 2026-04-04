@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
+import { hardcodedQuestions } from '../hardcodedData';
 
 const difficultyLabel = {
   BASIC: '기초',
@@ -24,7 +25,10 @@ export default function QuestionPage() {
     setGradeResult(null);
     api.get(`/questions/${id}`)
       .then(res => setQuestion(res.data))
-      .catch(console.error)
+      .catch(() => {
+        const fallback = hardcodedQuestions.find(q => q.id === Number(id));
+        setQuestion(fallback || null);
+      })
       .finally(() => setLoading(false));
     api.post(`/questions/${id}/study`).catch(() => {});
   }, [id]);

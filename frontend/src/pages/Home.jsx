@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
+import { hardcodedCategories, hardcodedQuestions } from '../hardcodedData';
 
 export default function Home() {
   const [categories, setCategories] = useState([]);
@@ -16,10 +17,13 @@ export default function Home() {
       api.get('/stats'),
     ])
       .then(([catRes, statsRes]) => {
-        setCategories(catRes.data);
+        setCategories(catRes.data?.length ? catRes.data : hardcodedCategories);
         setStats(statsRes.data);
       })
-      .catch(console.error)
+      .catch(() => {
+        setCategories(hardcodedCategories);
+        setStats({ totalQuestions: hardcodedQuestions.length, studiedQuestions: 0 });
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -32,7 +36,13 @@ export default function Home() {
     const timer = setTimeout(() => {
       api.get(`/questions/search?q=${encodeURIComponent(value.trim())}`)
         .then(res => setSearchResults(res.data))
-        .catch(console.error);
+        .catch(() => {
+          const q = value.trim().toLowerCase();
+          const results = hardcodedQuestions.filter(
+            item => item.title.toLowerCase().includes(q) || item.tags.toLowerCase().includes(q)
+          );
+          setSearchResults(results);
+        });
     }, 300);
     return () => clearTimeout(timer);
   }, []);

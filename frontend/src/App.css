@@ -2053,3 +2053,70 @@
   border: 1px dashed var(--accent-purple) !important;
   background: var(--accent-purple-light) !important;
 }
+
+/* ===== Major Exam Tabs ===== */
+.major-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 12px;
+  margin-top: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.major-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.major-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.major-tab:hover {
+  border-color: var(--accent-purple);
+  color: var(--accent-purple);
+}
+
+.major-tab.active {
+  background: var(--accent-purple);
+  color: #fff;
+  border-color: var(--accent-purple);
+}
+
+.major-tab-emoji {
+  font-size: 1rem;
+}
+
+.major-content {
+  margin-top: 8px;
+  padding-bottom: 40px;
+}
+
+.major-note-section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.major-note-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}

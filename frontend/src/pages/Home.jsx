@@ -141,7 +141,7 @@ export default function Home() {
             <Link to="/major-exam" className="category-card major-exam-card">
               <div className="category-icon">📝</div>
               <h3>전공필기</h3>
-              <p>코스콤, 금융결제원</p>
+              <p>금융공기업(코스콤, 금융결제원) 대비</p>
             </Link>
             <Link to="/interview" className="category-card interview-card">
               <div className="category-icon">🎤</div>

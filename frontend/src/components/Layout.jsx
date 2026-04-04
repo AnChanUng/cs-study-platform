@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ChaosChat from './ChaosChat';
 
 export default function Layout() {
   const location = useLocation();
@@ -109,6 +110,8 @@ export default function Layout() {
       <main className="container">
         <Outlet />
       </main>
+
+      <ChaosChat />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
+import { hardcodedCategories, hardcodedQuestions } from '../hardcodedData';
 
 const difficultyLabel = {
   BASIC: '기초',
@@ -22,10 +23,13 @@ export default function CategoryPage() {
       api.get(`/questions/category/${slug}`),
     ])
       .then(([catRes, qRes]) => {
-        setCategory(catRes.data);
-        setQuestions(qRes.data);
+        setCategory(catRes.data || hardcodedCategories.find(c => c.slug === slug));
+        setQuestions(qRes.data?.length ? qRes.data : hardcodedQuestions.filter(q => q.categorySlug === slug));
       })
-      .catch(console.error)
+      .catch(() => {
+        setCategory(hardcodedCategories.find(c => c.slug === slug) || null);
+        setQuestions(hardcodedQuestions.filter(q => q.categorySlug === slug));
+      })
       .finally(() => setLoading(false));
   }, [slug]);
 

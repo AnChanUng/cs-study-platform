@@ -52,6 +52,9 @@ export default function Layout() {
               <Link to="/stats" className={location.pathname === '/stats' ? 'active' : ''}>
                 통계
               </Link>
+              <Link to="/interview" className={location.pathname === '/interview' ? 'active' : ''}>
+                면접연습
+              </Link>
             </nav>
             {user ? (
               <div className="user-info">

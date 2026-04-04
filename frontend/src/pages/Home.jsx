@@ -128,6 +128,11 @@ export default function Home() {
                 <p>{cat.description}</p>
               </Link>
             ))}
+            <Link to="/interview" className="category-card interview-card">
+              <div className="category-icon">🎤</div>
+              <h3>공통면접질문</h3>
+              <p>카메라와 마이크로 실전 면접 연습</p>
+            </Link>
           </div>
         </>
       )}

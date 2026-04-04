@@ -1,0 +1,70 @@
+name: Slack Notification Scheduler
+
+on:
+  schedule:
+    # UTC 기준 (KST = UTC + 9)
+    # 오전 알림: KST 08:20 = UTC 23:20 (전날)
+    - cron: '20 23 * * *'
+    # 오후 알림: KST 18:10 = UTC 09:10
+    - cron: '10 9 * * *'
+    # 주간 요약: 월요일 KST 09:00 = UTC 00:00
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      type:
+        description: '알림 타입'
+        required: true
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - weekly
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine notification type
+        id: type
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "type=${{ github.event.inputs.type }}" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.schedule }}" = "0 0 * * 1" ]; then
+            echo "type=weekly" >> $GITHUB_OUTPUT
+          else
+            echo "type=daily" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Wake up Render server
+        run: |
+          echo "Waking up server (cold start may take ~30s)..."
+          curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 60 \
+            "${{ secrets.BACKEND_URL }}/api/v1/questions/categories" || true
+          sleep 5
+
+      - name: Send daily notification
+        if: steps.type.outputs.type == 'daily'
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            --max-time 30 \
+            "${{ secrets.BACKEND_URL }}/api/v1/slack/test-daily")
+          echo "Response: $response"
+          if [ "$response" != "200" ]; then
+            echo "::error::Failed to send daily notification (HTTP $response)"
+            exit 1
+          fi
+
+      - name: Send weekly summary
+        if: steps.type.outputs.type == 'weekly'
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            --max-time 30 \
+            "${{ secrets.BACKEND_URL }}/api/v1/slack/test-weekly")
+          echo "Response: $response"
+          if [ "$response" != "200" ]; then
+            echo "::error::Failed to send weekly summary (HTTP $response)"
+            exit 1
+          fi

@@ -20,8 +20,17 @@ public class ChatService {
     private final QuestionRepository questionRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${anthropic.api-key:}")
+    @Value("${gemini.api-key:}")
     private String apiKey;
+
+    private static final String SYSTEM_PROMPT = """
+            너는 '카오스 고양이'야. CS 면접 준비를 도와주는 귀여운 고양이 AI 조교야.
+            말투는 반말이고 고양이답게 가끔 "냥", "먀" 같은 표현을 섞어.
+            하지만 CS 지식은 정��하고 깊이 있게 답변해야 해.
+            답변은 간결하되 핵심을 놓치지 마.
+            코드 ��시가 필요하면 짧게 포함해.
+            모르는 건 솔직하게 모른다고 해.
+            """;
 
     public Map<String, Object> chat(String userMessage, List<Map<String, String>> history) {
         if (apiKey == null || apiKey.isBlank()) {
@@ -29,42 +38,50 @@ public class ChatService {
         }
 
         try {
-            return callClaude(userMessage, history);
+            return callGemini(userMessage, history);
         } catch (Exception e) {
-            log.error("Claude API error, falling back", e);
+            log.error("Gemini API error, falling back", e);
             return fallbackChat(userMessage);
         }
     }
 
-    private Map<String, Object> callClaude(String userMessage, List<Map<String, String>> history) {
-        String systemPrompt = """
-                너는 '카오스 고양이'야. CS 면접 준비를 도와주는 귀여운 고양이 AI 조교야.
-                말투는 반말이고 고양이답게 가끔 "냥", "먀" 같은 표현을 섞어.
-                하지만 CS 지식은 정확하고 깊이 있게 답변해야 해.
-                답변은 간결하되 핵심을 놓치지 마.
-                코드 예시가 필요하면 짧게 포함해.
-                모르는 건 솔직하게 모른다고 해.
-                """;
+    private Map<String, Object> callGemini(String userMessage, List<Map<String, String>> history) {
+        String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + apiKey;
 
-        List<Map<String, String>> messages = new ArrayList<>();
+        // Build contents array with history
+        List<Map<String, Object>> contents = new ArrayList<>();
+
         if (history != null) {
-            messages.addAll(history);
+            for (Map<String, String> msg : history) {
+                String role = "user".equals(msg.get("role")) ? "user" : "model";
+                contents.add(Map.of(
+                        "role", role,
+                        "parts", List.of(Map.of("text", msg.get("content")))
+                ));
+            }
         }
-        messages.add(Map.of("role", "user", "content", userMessage));
+
+        // Add current user message
+        contents.add(Map.of(
+                "role", "user",
+                "parts", List.of(Map.of("text", userMessage))
+        ));
 
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("model", "claude-haiku-4-5-20251001");
-        body.put("max_tokens", 1024);
-        body.put("system", systemPrompt);
-        body.put("messages", messages);
+        body.put("system_instruction", Map.of(
+                "parts", List.of(Map.of("text", SYSTEM_PROMPT))
+        ));
+        body.put("contents", contents);
+        body.put("generationConfig", Map.of(
+                "maxOutputTokens", 1024,
+                "temperature", 0.7
+        ));
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-api-key", apiKey);
-        headers.set("anthropic-version", "2023-06-01");
 
         ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.anthropic.com/v1/messages",
+                url,
                 HttpMethod.POST,
                 new HttpEntity<>(body, headers),
                 Map.class
@@ -75,10 +92,15 @@ public class ChatService {
             return fallbackChat(userMessage);
         }
 
-        List<Map<String, Object>> content = (List<Map<String, Object>>) responseBody.get("content");
-        String reply = content.stream()
-                .filter(c -> "text".equals(c.get("type")))
-                .map(c -> (String) c.get("text"))
+        List<Map<String, Object>> candidates = (List<Map<String, Object>>) responseBody.get("candidates");
+        if (candidates == null || candidates.isEmpty()) {
+            return fallbackChat(userMessage);
+        }
+
+        Map<String, Object> content = (Map<String, Object>) candidates.get(0).get("content");
+        List<Map<String, Object>> parts = (List<Map<String, Object>>) content.get("parts");
+        String reply = parts.stream()
+                .map(p -> (String) p.get("text"))
                 .collect(Collectors.joining());
 
         return Map.of("reply", reply, "source", "ai");
@@ -122,7 +144,7 @@ public class ChatService {
             }
             sb.append(answer).append("\n\n");
         }
-        sb.append("더 자세한 내용은 해당 질문 페이지에서 확인해봐냥!");
+        sb.append("더 자세한 내용은 해당 질문 페이지에서 확인���봐냥!");
 
         return Map.of("reply", sb.toString(), "source", "fallback");
     }

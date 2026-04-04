@@ -6,6 +6,7 @@ import CategoryPage from './pages/CategoryPage';
 import QuestionPage from './pages/QuestionPage';
 import StatsPage from './pages/StatsPage';
 import InterviewPracticePage from './pages/InterviewPracticePage';
+import MajorExamPage from './pages/MajorExamPage';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="question/:id" element={<QuestionPage />} />
             <Route path="stats" element={<StatsPage />} />
             <Route path="interview" element={<InterviewPracticePage />} />
+            <Route path="major-exam" element={<MajorExamPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

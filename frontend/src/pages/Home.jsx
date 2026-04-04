@@ -131,13 +131,18 @@ export default function Home() {
         <>
           <div className="section-title">카테고리</div>
           <div className="categories-grid">
-            {categories.map(cat => (
+            {categories.filter(cat => cat.slug !== 'cicd' && cat.slug !== 'major-exam').map(cat => (
               <Link to={`/category/${cat.slug}`} key={cat.id} className="category-card">
                 <div className="category-icon">{cat.iconEmoji}</div>
                 <h3>{cat.name}</h3>
                 <p>{cat.description}</p>
               </Link>
             ))}
+            <Link to="/major-exam" className="category-card major-exam-card">
+              <div className="category-icon">📝</div>
+              <h3>전공필기</h3>
+              <p>코스콤, 금융결제원</p>
+            </Link>
             <Link to="/interview" className="category-card interview-card">
               <div className="category-icon">🎤</div>
               <h3>공통면접질문</h3>

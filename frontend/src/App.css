@@ -1969,3 +1969,87 @@
     font-size: 1.4rem;
   }
 }
+
+/* ===== Major Exam Notes ===== */
+.note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.note-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+.note-header:hover {
+  background: var(--bg-secondary);
+}
+
+.note-header.open {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.note-title {
+  text-align: left;
+}
+
+.note-toggle {
+  font-size: 1.3rem;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.note-body {
+  padding: 20px 24px;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.note-subtitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin: 16px 0 8px 0;
+}
+
+.note-subtitle:first-child {
+  margin-top: 0;
+}
+
+.note-bullet {
+  padding-left: 8px;
+  position: relative;
+}
+
+.note-line {
+  padding-left: 8px;
+}
+
+.note-spacer {
+  height: 8px;
+}
+
+.major-exam-card {
+  border: 1px dashed var(--accent-purple) !important;
+  background: var(--accent-purple-light) !important;
+}

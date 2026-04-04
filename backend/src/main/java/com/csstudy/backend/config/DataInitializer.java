@@ -64,7 +64,7 @@ public class DataInitializer implements CommandLineRunner {
                 Category.builder().name("자바").slug("java").description("Java programming language").displayOrder(8).iconEmoji("☕").build(),
                 Category.builder().name("쿠버네티스").slug("kubernetes").description("Kubernetes container orchestration").displayOrder(9).iconEmoji("⎈").build(),
                 Category.builder().name("도커").slug("docker").description("Docker containerization").displayOrder(10).iconEmoji("🐳").build(),
-                Category.builder().name("CI/CD").slug("cicd").description("Continuous Integration and Deployment").displayOrder(11).iconEmoji("🔄").build()
+                Category.builder().name("전공필기").slug("major-exam").description("코스콤, 금융결제원").displayOrder(11).iconEmoji("📝").build()
         );
         categoryRepository.saveAll(categories);
         log.info("Seeded {} default categories.", categories.size());

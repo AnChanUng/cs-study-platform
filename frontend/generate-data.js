@@ -16,7 +16,7 @@ const categories = [
   { id: 8, name: '자바', slug: 'java', description: 'Java programming language', displayOrder: 8, iconEmoji: '☕' },
   { id: 9, name: '쿠버네티스', slug: 'kubernetes', description: 'Kubernetes container orchestration', displayOrder: 9, iconEmoji: '⎈' },
   { id: 10, name: '도커', slug: 'docker', description: 'Docker containerization', displayOrder: 10, iconEmoji: '🐳' },
-  { id: 11, name: 'CI/CD', slug: 'cicd', description: 'Continuous Integration and Deployment', displayOrder: 11, iconEmoji: '🔄' },
+  { id: 11, name: '전공필기', slug: 'major-exam', description: '코스콤, 금융결제원', displayOrder: 11, iconEmoji: '📝' },
 ];
 
 function parseFrontmatter(content) {

@@ -17,7 +17,7 @@ CS 공부를 웹 사이트, 카테고리별 학습, AI 채점, AI 챗봇, Slack 
 - **오프라인 대응** - 백엔드 서버가 다운되어도 하드코딩된 콘텐츠로 학습 가능
 
 ### Slack 리마인드 봇
-- **하루 2회 알림** - 오전 8:20 / 오후 6:10 (KST)
+- **하루 2회 알림**
 - **요일별 카테고리 스케줄**
 
 | 요일 | 카테고리 |
@@ -40,7 +40,7 @@ CS 공부를 웹 사이트, 카테고리별 학습, AI 채점, AI 챗봇, Slack 
 | **Frontend** | React 19, Vite 8, Axios |
 | **Backend** | Spring Boot 3.2, Spring Data JPA |
 | **Database** | PostgreSQL |
-| **AI** | Google Gemini 2.0 Flash (무료) |
+| **AI** | Google Gemini 2.0 Flash |
 | **배포** | Vercel (Frontend), Render (Backend + DB) |
 | **알림** | Slack Incoming Webhooks |
 
@@ -91,5 +91,3 @@ npm run dev
 | `JDBC_DATABASE_URL` | PostgreSQL 접속 URL | O |
 | `SLACK_WEBHOOK_URL` | Slack 웹훅 URL | X |
 | `SLACK_ENABLED` | Slack 알림 활성화 | X (기본 false) |
-
-Gemini API 키는 [Google AI Studio](https://aistudio.google.com)에서 무료로 발급받을 수 있습니다.
